@@ -57,6 +57,12 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     target = out_dir / "entry.png"
     target.write_bytes(data)
+    # Verify the copy: the judge must receive exactly the bytes in this
+    # repository, so read the written file back and compare it with the
+    # source before reporting success.
+    written = target.read_bytes()
+    if written != data:
+        abort(f"wrote {len(written)} bytes to {target}, expected {len(data)}")
     print(f"main.py: wrote {target} ({width}x{height}, {len(data)} bytes)")
 
 
